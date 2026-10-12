@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin Login | Portfolio</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 20px;
+            background: #0b1020;
+            color: #edf2ff;
+            font-family: Arial, sans-serif;
+        }
+
+        .login-box {
+            width: 100%;
+            max-width: 400px;
+            padding: 30px;
+            border: 1px solid #27334d;
+            border-radius: 18px;
+            background: #121a2d;
+        }
+
+        h1 {
+            margin-top: 0;
+        }
+
+        p {
+            color: #aab6cd;
+        }
+
+        label {
+            display: block;
+            margin: 18px 0 7px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #35415a;
+            border-radius: 8px;
+            background: #0b1020;
+            color: white;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 24px;
+            padding: 12px;
+            border: 0;
+            border-radius: 8px;
+            background: #a7b4ff;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .error {
+            color: #ff9fac;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 18px;
+            color: #a7b4ff;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="login-box">
+
+    <h1>Admin Login</h1>
+    <p>Sign in to view your portfolio messages.</p>
+
+    <p class="error" th:if="${param.error}">
+        Incorrect username or password.
+    </p>
+
+    <p th:if="${param.logout}">
+        You have logged out successfully.
+    </p>
+
+    <form th:action="@{/admin/login}" method="post">
+
+        <label for="username">Username</label>
+        <input
+                id="username"
+                name="username"
+                type="text"
+                autocomplete="username"
+                required
+        >
+
+        <label for="password">Password</label>
+        <input
+                id="password"
+                name="password"
+                type="password"
+                autocomplete="current-password"
+                required
+        >
+
+        <button type="submit">Sign In</button>
+
+    </form>
+
+    <a th:href="@{/}">Back to portfolio</a>
+
+</div>
+
+</body>
+</html>

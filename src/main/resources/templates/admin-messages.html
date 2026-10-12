@@ -1,0 +1,728 @@
+```html
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Messages Dashboard | Portfolio Admin</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #0b1020;
+            --surface: #121a2d;
+            --surface-hover: #17223a;
+            --border: #27334d;
+            --text: #edf2ff;
+            --muted: #aab6cd;
+            --accent: #a7b4ff;
+            --accent-hover: #c0c9ff;
+            --success: #9be7cb;
+            --success-bg: #18362f;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: var(--bg);
+            color: var(--text);
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+
+        a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        button {
+            font: inherit;
+        }
+
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            padding: 17px 5%;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 19px;
+            font-weight: 700;
+        }
+
+        .brand-icon {
+            display: grid;
+            place-items: center;
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: #202b48;
+            color: var(--accent);
+            font-size: 22px;
+        }
+
+        .topbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .logout-form {
+            margin: 0;
+        }
+
+        .logout-button {
+            padding: 9px 14px;
+            border: 1px solid #35415a;
+            border-radius: 9px;
+            background: transparent;
+            color: var(--text);
+            cursor: pointer;
+        }
+
+        .logout-button:hover {
+            border-color: var(--accent);
+        }
+
+        .container {
+            width: min(1120px, 92%);
+            margin: 38px auto;
+        }
+
+        .page-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        h1 {
+            margin: 0 0 7px;
+            font-size: clamp(27px, 4vw, 36px);
+            letter-spacing: -0.7px;
+        }
+
+        h2 {
+            margin: 0;
+            font-size: 22px;
+        }
+
+        .subtitle,
+        .muted {
+            color: var(--muted);
+        }
+
+        .subtitle {
+            margin: 0;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+            margin-bottom: 38px;
+        }
+
+        .stat-card {
+            position: relative;
+            overflow: hidden;
+            padding: 23px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 17px;
+        }
+
+        .stat-card::after {
+            position: absolute;
+            right: -20px;
+            bottom: -35px;
+            width: 115px;
+            height: 115px;
+            border-radius: 50%;
+            background: #a7b4ff;
+            opacity: 0.06;
+            content: "";
+        }
+
+        .stat-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .stat-label {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .stat-icon {
+            display: grid;
+            place-items: center;
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: #202b48;
+            color: var(--accent);
+            font-size: 21px;
+        }
+
+        .stat-number {
+            display: block;
+            margin-top: 12px;
+            font-size: 34px;
+            line-height: 1.2;
+            font-weight: 700;
+        }
+
+        .section-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .inbox-label {
+            padding: 6px 11px;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .messages-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .message-card {
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 17px;
+            overflow-wrap: anywhere;
+            transition: border-color 0.2s ease,
+                        background 0.2s ease,
+                        transform 0.2s ease;
+        }
+
+        .message-card:hover {
+            background: var(--surface-hover);
+            border-color: #485779;
+            transform: translateY(-2px);
+        }
+
+        .message-card.unread {
+            border-color: #414d76;
+            border-left: 4px solid var(--accent);
+        }
+
+        .card-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .sender-icon {
+            display: grid;
+            place-items: center;
+            width: 46px;
+            height: 46px;
+            flex-shrink: 0;
+            border-radius: 13px;
+            background: #202b48;
+            color: var(--accent);
+            font-size: 22px;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 11px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .badge-unread {
+            background: #29345a;
+            color: #d4daff;
+        }
+
+        .badge-read {
+            background: var(--success-bg);
+            color: var(--success);
+        }
+
+        .sender-name {
+            margin: 0;
+            font-size: 19px;
+            line-height: 1.4;
+            overflow-wrap: anywhere;
+        }
+
+        .sender-email {
+            margin: 7px 0 0;
+            color: var(--muted);
+            font-size: 14px;
+            overflow-wrap: anywhere;
+        }
+
+        .card-subject {
+            margin: 20px 0 8px;
+            color: var(--accent);
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .card-message {
+            margin: 0;
+            color: #d1d9eb;
+            font-size: 14px;
+            line-height: 1.8;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
+
+        .card-phone {
+            margin-top: 15px;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .card-date {
+            margin-top: 17px;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: auto;
+            padding-top: 19px;
+        }
+
+        .mark-read-form {
+            margin: 0;
+        }
+
+        .primary-button {
+            padding: 10px 14px;
+            border: 0;
+            border-radius: 9px;
+            background: var(--accent);
+            color: #0b1020;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .primary-button:hover {
+            background: var(--accent-hover);
+        }
+
+        .read-confirmation {
+            color: var(--success);
+            font-size: 13px;
+        }
+
+        .empty-state {
+            padding: 48px 22px;
+            text-align: center;
+            background: var(--surface);
+            border: 1px dashed #35415a;
+            border-radius: 17px;
+        }
+
+        .empty-icon {
+            display: inline-grid;
+            place-items: center;
+            width: 65px;
+            height: 65px;
+            margin-bottom: 12px;
+            border-radius: 18px;
+            background: #202b48;
+            color: var(--accent);
+            font-size: 30px;
+        }
+
+        .empty-state h3 {
+            margin: 0 0 7px;
+        }
+
+        .empty-state p {
+            margin: 0;
+            color: var(--muted);
+        }
+
+        .notice {
+            margin-bottom: 20px;
+            padding: 13px 16px;
+            border: 1px solid #285c4d;
+            border-radius: 10px;
+            background: var(--success-bg);
+            color: var(--success);
+        }
+
+        .notice-warning {
+            border-color: #66572b;
+            background: #302817;
+            color: #ffe0a0;
+        }
+
+        footer {
+            padding: 24px 5%;
+            margin-top: 55px;
+            border-top: 1px solid var(--border);
+            color: var(--muted);
+            text-align: center;
+            font-size: 13px;
+        }
+
+        @media (max-width: 720px) {
+            .messages-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                margin-top: 28px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .topbar {
+                align-items: flex-start;
+                flex-direction: column;
+                padding: 15px 4%;
+            }
+
+            .topbar-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 13px;
+            }
+
+            .stat-card {
+                padding: 18px;
+            }
+
+            .message-card {
+                padding: 18px;
+            }
+
+            .container {
+                width: 92%;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                transition: none !important;
+            }
+
+            .message-card:hover {
+                transform: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <div class="brand">
+        <div class="brand-icon" aria-hidden="true">✉</div>
+        <span>Portfolio Admin</span>
+    </div>
+
+    <div class="topbar-actions">
+
+        <a th:href="@{/}">
+            View Website ↗
+        </a>
+
+        <form class="logout-form"
+              th:action="@{/logout}"
+              method="post">
+
+            <button class="logout-button" type="submit">
+                Logout
+            </button>
+
+        </form>
+
+    </div>
+
+</header>
+
+<main class="container">
+
+    <section class="page-heading">
+
+        <div>
+            <h1>Messages Dashboard</h1>
+
+            <p class="subtitle">
+                Manage messages received through your portfolio.
+            </p>
+        </div>
+
+    </section>
+
+    <!-- Dashboard statistics -->
+    <section class="stats-grid">
+
+        <article class="stat-card">
+
+            <div class="stat-top">
+
+                <span class="stat-label">
+                    Total Messages
+                </span>
+
+                <div class="stat-icon" aria-hidden="true">
+                    ✉
+                </div>
+
+            </div>
+
+            <span class="stat-number"
+                  th:text="${totalCount}">
+                0
+            </span>
+
+        </article>
+
+        <article class="stat-card">
+
+            <div class="stat-top">
+
+                <span class="stat-label">
+                    Unread Messages
+                </span>
+
+                <div class="stat-icon" aria-hidden="true">
+                    ◉
+                </div>
+
+            </div>
+
+            <span class="stat-number"
+                  th:text="${unreadCount}">
+                0
+            </span>
+
+        </article>
+
+    </section>
+
+    <!-- Success and error feedback -->
+    <div class="notice"
+         th:if="${param.updated}">
+
+        ✓ Message marked as read successfully.
+
+    </div>
+
+    <div class="notice notice-warning"
+         th:if="${param.notFound}">
+
+        The selected message could not be found.
+
+    </div>
+
+    <!-- Inbox heading -->
+    <section class="section-heading">
+
+        <h2>Recent Messages</h2>
+
+        <span class="inbox-label">
+            Unread first · Newest first
+        </span>
+
+    </section>
+
+    <!-- Empty inbox -->
+    <section class="empty-state"
+             th:if="${#lists.isEmpty(contacts)}">
+
+        <div class="empty-icon" aria-hidden="true">
+            ✉
+        </div>
+
+        <h3>No messages yet</h3>
+
+        <p>
+            Messages submitted through your contact form
+            will appear here.
+        </p>
+
+    </section>
+
+    <!-- Responsive message cards -->
+    <section class="messages-grid"
+             th:if="${!#lists.isEmpty(contacts)}">
+
+        <article th:each="contact : ${contacts}"
+                 class="message-card"
+                 th:classappend="${!contact.read} ? ' unread' : ''">
+
+            <div class="card-top">
+
+                <div class="sender-icon" aria-hidden="true">
+                    ♙
+                </div>
+
+                <span class="status-badge badge-unread"
+                      th:if="${!contact.read}">
+
+                    ● Unread
+
+                </span>
+
+                <span class="status-badge badge-read"
+                      th:if="${contact.read}">
+
+                    ✓ Read
+
+                </span>
+
+            </div>
+
+            <h3 class="sender-name"
+                th:text="${contact.fullName}">
+
+                Sender Name
+
+            </h3>
+
+            <p class="sender-email">
+
+                <a th:href="'mailto:' + ${contact.email}"
+                   th:text="${contact.email}">
+
+                    sender@example.com
+
+                </a>
+
+            </p>
+
+            <h4 class="card-subject"
+                th:text="${contact.subject}">
+
+                Message Subject
+
+            </h4>
+
+            <p class="card-message"
+               th:text="${contact.message}">
+
+                Message content appears here.
+
+            </p>
+
+            <p class="card-phone"
+               th:if="${contact.phone != null
+                       and !#strings.isEmpty(contact.phone)}">
+
+                <strong>Phone:</strong>
+
+                <span th:text="${contact.phone}"></span>
+
+            </p>
+
+            <p class="card-date">
+
+                <span>Message #</span>
+
+                <span th:text="${contact.id}">1</span>
+
+                <span> · </span>
+
+                <span th:text="${contact.createdAt}">
+                    Received date
+                </span>
+
+            </p>
+
+            <div class="card-footer">
+
+                <form class="mark-read-form"
+                      th:if="${!contact.read}"
+                      th:action="@{/admin/messages/{id}/read(id=${contact.id})}"
+                      method="post">
+
+                    <button class="primary-button"
+                            type="submit">
+
+                        ✓ Mark as Read
+
+                    </button>
+
+                </form>
+
+                <span class="read-confirmation"
+                      th:if="${contact.read}">
+
+                    ✓ Already read
+
+                </span>
+
+            </div>
+
+        </article>
+
+    </section>
+
+</main>
+
+<footer>
+    Portfolio Admin Dashboard
+</footer>
+
+</body>
+</html>
+```
