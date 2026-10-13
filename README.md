@@ -1,53 +1,54 @@
 # Portfolio Website
 
-A personal portfolio website built using Java and Spring Boot, featuring a contact form and a secure admin dashboard for managing messages.
+A personal portfolio website built using **Java, Spring Boot, and MySQL**, featuring a contact form and a secure admin dashboard for managing messages.
 
-## Overview
+## About the Project
 
-This project showcases my portfolio development skills, backend programming, database integration, and authentication using Spring Boot.
+This project demonstrates my skills in backend development, REST API development, database integration, authentication, and building web applications using Spring Boot.
 
-Visitors can explore the portfolio and send messages through the contact form. The admin dashboard provides a card-based interface to view received messages and track their read status.
+Visitors can explore the portfolio and submit messages through the contact form. The admin dashboard allows the authorized administrator to view received messages and manage their read status.
 
 ## Features
 
-- Responsive portfolio website
-- Contact form for receiving messages
-- Backend REST API integration
+- Personal portfolio homepage
+- Contact form for visitor messages
+- REST API integration
 - MySQL database integration
 - Admin login and protected dashboard
-- Card-based message management
-- Read and unread message status
-- Thymeleaf server-side rendering
+- Card-based message dashboard
+- Read and unread message management
+- Thymeleaf templates for server-side rendering
+- Environment-based configuration for credentials
 - Git and GitHub version control
 
 ## Screenshots
 
-### Portfolio Homepage
+### 1. Portfolio Homepage
 
-![Portfolio Homepage](screenshots/homepage.png)
+![Portfolio Homepage](src/main/resources/screenshots/homepage.png)
 
-### Admin Login
+### 2. Admin Login
 
-![Admin Login](screenshots/admin-login.png)
+![Admin Login](src/main/resources/screenshots/admin-login.png)
 
-### Messages Dashboard
+### 3. Admin Messages Dashboard
 
-![Messages Dashboard](screenshots/messages-dashboard.png)
+![Admin Messages Dashboard](src/main/resources/screenshots/messages-dashboard.png)
 
-## Tech Stack
+## Technology Stack
 
 | Technology | Purpose |
 |---|---|
-| Java | Backend programming |
+| Java 21 | Backend programming |
 | Spring Boot | Application framework |
-| Spring MVC | Request handling and routing |
+| Spring MVC | Request handling |
 | Spring Security | Authentication and access control |
 | Spring Data JPA | Database operations |
-| Hibernate | ORM |
+| Hibernate | Object-relational mapping |
 | MySQL | Relational database |
-| Thymeleaf | Server-side HTML templates |
-| HTML and CSS | User interface |
-| Maven | Dependency and build management |
+| Thymeleaf | Server-side HTML rendering |
+| HTML and CSS | Frontend development |
+| Maven | Dependency management and build |
 | Git and GitHub | Version control |
 
 ## Project Structure
@@ -66,22 +67,26 @@ portfolio/
 │   │   │   ├── service/
 │   │   │   └── PortfolioApplication.java
 │   │   └── resources/
-│   │       ├── templates/
 │   │       ├── static/
+│   │       ├── templates/
+│   │       ├── screenshots/
 │   │       └── application.properties
 │   └── test/
 ├── pom.xml
 └── README.md
 ```
 
-## Run Locally
+## Run the Project Locally
 
 ### Prerequisites
 
+Install the following:
+
 - Java 21
-- Maven
 - MySQL Server
 - Git
+
+Maven can be run using the included Maven Wrapper.
 
 ### 1. Clone the repository
 
@@ -90,7 +95,7 @@ git clone https://github.com/amanpandey2025/portfolio.git
 cd portfolio
 ```
 
-### 2. Create the database
+### 2. Create the MySQL database
 
 Open MySQL and execute:
 
@@ -100,19 +105,27 @@ CREATE DATABASE portfolio;
 
 ### 3. Configure environment variables
 
-Configure the following environment variables in your IDE or terminal:
+Configure the following variables in your IDE's Run Configuration or your operating system:
 
-- `DB_URL`
-- `DB_USERNAME`
-- `DB_PASSWORD`
-- `ADMIN_USERNAME`
-- `ADMIN_PASSWORD`
+| Variable | Description |
+|---|---|
+| `DB_URL` | MySQL JDBC connection URL |
+| `DB_USERNAME` | MySQL username |
+| `DB_PASSWORD` | MySQL password |
+| `ADMIN_USERNAME` | Admin login username |
+| `ADMIN_PASSWORD` | Admin login password |
 
-Use your own local database credentials and a strong admin password. Never commit real credentials to GitHub.
+For local development, the database URL can be:
 
-### 4. Run the application
+```text
+jdbc:mysql://localhost:3306/portfolio
+```
 
-On Windows PowerShell:
+Use your own database credentials and a strong admin password. Do not commit actual passwords, API keys, or other secrets to GitHub.
+
+### 4. Start the application
+
+On Windows PowerShell, run:
 
 ```powershell
 .\mvnw.cmd spring-boot:run
@@ -120,31 +133,37 @@ On Windows PowerShell:
 
 ### 5. Open the website
 
-- Homepage: http://localhost:8080/
-- Admin login: http://localhost:8080/admin/login
-- Messages dashboard: http://localhost:8080/admin/messages
+When the application starts successfully, open:
 
-## Security Notes
+- **Portfolio:** http://localhost:8080/
+- **Admin Login:** http://localhost:8080/admin/login
+- **Messages Dashboard:** http://localhost:8080/admin/messages
 
-- Keep database and admin credentials outside source control.
+The application must be running locally for these localhost URLs to work.
+
+## Security Considerations
+
+- Keep database credentials outside source control.
 - Use environment variables for sensitive configuration.
-- Restrict admin dashboard access to authorized users.
-- Use HTTPS and secure configuration when deploying publicly.
+- Restrict the admin dashboard to authorized users.
+- Use HTTPS and secure production configuration when deploying.
+- Avoid exposing visitors' private messages and contact details in public screenshots.
 
 ## Future Improvements
 
-- Cloud deployment
-- Cloud database integration
-- Message search and filtering
-- Pagination for large inboxes
-- Automated testing and CI/CD
+- Deploy the application to a cloud hosting platform.
+- Configure a managed cloud database.
+- Add search, filtering, and pagination to the dashboard.
+- Improve automated testing.
+- Configure continuous integration and deployment (CI/CD).
 
 ## Author
 
 **Aman Pandey**
 
 - GitHub: [@amanpandey2025](https://github.com/amanpandey2025)
+- Repository: [Portfolio Website](https://github.com/amanpandey2025/portfolio)
 
 ---
 
-This project is continuously evolving as I improve my Java, Spring Boot, database, and deployment skills.
+Built as a personal project to strengthen my skills in Java, Spring Boot, REST APIs, MySQL, and web application development.
